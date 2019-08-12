@@ -2,29 +2,49 @@
 import requests
 import json
 import ast
+import re
+from bs4 import BeautifulSoup
+from datetime import date, datetime
+import sqlite3 as sql
+from string import ascii_lowercase
 
 # Added for Selenium
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from bs4 import BeautifulSoup
-import re
 import selenium.webdriver.support.ui as ui
 from selenium.webdriver.chrome.options import Options
-from datetime import date, datetime
-import sqlite3 as sql
-from string import ascii_lowercase
 from selenium.common.exceptions import TimeoutException
-from DCRDataBaseUtility import db_query, db_commit_query, db_json, db_commit_query_id
 from selenium.webdriver.common.keys import Keys
+#Added for the innodb
+from DCRDataBaseUtility import db_query, db_commit_query, db_json, db_commit_query_id
 
-# TO MAKE THE SCRAPPING FASTER
-chrome_options = Options()
-chrome_options.add_argument("--disable-extensions")
-chrome_options.add_argument("--headless")
-driver = webdriver.Chrome(chrome_options=chrome_options)
-driver = webdriver.Chrome()
+
+def init_webdriver():
+    global driver
+    # --- Options to make scraping faster
+    chrome_options = Options()
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(executable_path = DRIVER_PATH, chrome_options=chrome_options)
+    return driver
+
+#LOADING_ELEMENT_XPATH will be the element required to check
+def wait_for_loading(driver,LOADING_ELEMENT_XPATH):
+    try:
+        SHORT_TIMEOUT = 5   # give enough time for the loading element to appear
+        LONG_TIMEOUT = 30  # give enough time for loading to finish
+        # wait for loading element to appear
+        WebDriverWait(driver, SHORT_TIMEOUT
+            ).until(EC.presence_of_element_located((By.XPATH, LOADING_ELEMENT_XPATH)))
+        # then wait for the element to disappear
+        WebDriverWait(driver, LONG_TIMEOUT
+            ).until_not(EC.presence_of_element_located((By.XPATH, LOADING_ELEMENT_XPATH)))
+    except TimeoutException:
+        print(TimeoutException)
+        pass
+
 delay = 0
 # Query for Ticker
 BSE_ticker_list = db_query("""
@@ -35,25 +55,7 @@ BSE_ticker_list = db_query("""
 
 '65, 69, 73, 77, 81, 85, 89, '
 period_id_list = [85]
-
-for period_id in period_id_list:
-    for b in BSE_ticker_list:
-
-        BSETicker = b['BSETicker']
-        Ticker = b['Ticker']
-
-        link_profile = "https://beta.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=" + \
-            BSETicker + "&qtrid="+str(period_id)+"&QtrName=A"
-        driver.get(link_profile)
-
-        try:
-            myElem = WebDriverWait(driver, delay).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, "TTRow")))
-
-        except TimeoutException:
-            pass
-
-        holder_dict = {
+holder_dict = {
             "holder_name": "",
             "holder_type": "",
             "no_of_shareholders": 0,
@@ -66,15 +68,31 @@ for period_id in period_id_list:
             "Ticker": Ticker,
             "period_id": period_id
         }
-        col_list = ['holder_name', 'no_of_shareholders', 'no_of_fully_paid_shares',
-                    'num_total_shares', 'perc_total_shares', 'num_pledged_shares', 'perc_pledged_shares']
-        col_dic = {'Category of shareholder': 'holder_name',
-                   'Nos. of shareholders': 'no_of_shareholders',
-                   'No. of fully paid up equity shares held': 'no_of_fully_paid_shares',
-                   'Total nos. shares held': 'num_total_shares',
-                   'Shareholding as a % of total no. of shares (calculated as per SCRR, 1957)As a % of (A+B+C2)': 'perc_total_shares',
-                   'Number of equity shares held in dematerialized form': 'num_demat_shares'
-                   }
+col_list = ['holder_name', 'no_of_shareholders', 'no_of_fully_paid_shares',
+            'num_total_shares', 'perc_total_shares', 'num_pledged_shares', 'perc_pledged_shares']
+col_dic = {'Category of shareholder': 'holder_name',
+            'Nos. of shareholders': 'no_of_shareholders',
+            'No. of fully paid up equity shares held': 'no_of_fully_paid_shares',
+            'Total nos. shares held': 'num_total_shares',
+            'Shareholding as a % of total no. of shares (calculated as per SCRR, 1957)As a % of (A+B+C2)': 'perc_total_shares',
+            'Number of equity shares held in dematerialized form': 'num_demat_shares'
+            }
+
+for period_id in period_id_list:
+    for b in BSE_ticker_list:
+        BSETicker = b['BSETicker']
+        Ticker = b['Ticker']
+
+        link_profile = "https://beta.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=" + \
+            BSETicker + "&qtrid="+str(period_id)+"&QtrName=A"
+        driver.get(link_profile)
+
+        try:
+            myElem = WebDriverWait(driver, delay).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "TTRow")))
+
+        except TimeoutException:
+            print(TimeoutException)
         try:
             table_1 = driver.find_elements_by_tag_name('table')
             table_2 = table_1[0].find_elements_by_tag_name('table')
