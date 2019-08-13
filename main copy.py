@@ -1,37 +1,36 @@
 import requests
 import pandas as pd
 from lxml import html
-
-def get_table_df():
+def get_table_promoter_n_group_df(URL):
     try:
-        URL=r'https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=532500&qtrid=102.00&QtrName=June%202019'
+        #URL=r'https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=532500&qtrid=102.00&QtrName=June%202019'
+        r = requests.get(URL)
+        tree = html.fromstring(r.content)
+        cols=tree.xpath('//*[@class="innertable_header1"]/text()')
+        df=pd.DataFrame(columns=cols)
+        for i in range(0,len(cols)):
+            try:
+                tr_elements=tree.xpath(f'//tr[3]//td[{i+1}]')
+                if i==0:
+                    df[cols[i]]=[(T.text_content()) for T in tr_elements][-7:]
+                else:
+                    df[cols[i]]=[(T.text_content()) for T in tr_elements]
+            except Exception as e:
+                print(e)
+                continue
+    except ValueError as v:
+        print(i)
+        print(v)
+    return df.iloc[1:,:]
+
+def PublicShareholder_df(URL):
+    try:
         #URL=r'https://www.bseindia.com/corporates/shpPublicShareholder.aspx?scripcd=532500&qtrid=101.00&QtrName=June%202019'
         r = requests.get(URL)
         tree = html.fromstring(r.content)
         cols=tree.xpath('//*[@class="innertable_header1"]/text()')
         df=pd.DataFrame(columns=cols)
         for i in range(0,len(cols)):
-            tr_elements=tree.xpath(f'//tr[3]//td[{i+1}]')
-            if i==0:
-                df[cols[i]]=[(T.text_content()) for T in tr_elements][-7:]
-            #print(tr_elements)
-            else:
-                df[cols[i]]=[(T.text_content()) for T in tr_elements]
-    except ValueError:
-        print(i)
-        print(ValueError)
-    return df.iloc[1:,:]
-
-def PublicShareholder_df():
-    try:
-        #URL=r'https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=532500&qtrid=102.00&QtrName=June%202019'
-        URL=r'https://www.bseindia.com/corporates/shpPublicShareholder.aspx?scripcd=532500&qtrid=101.00&QtrName=June%202019'
-        r = requests.get(URL)
-        tree = html.fromstring(r.content)
-        ll=tree.xpath('//*[@class="innertable_header1"]/text()')
-        cols=ll
-        df=pd.DataFrame(columns=cols)
-        for i in range(0,len(ll)):
             try:
                 tr_elements=tree.xpath(f'//tr[3]//td[{i+2}]')
                 if i==2:
