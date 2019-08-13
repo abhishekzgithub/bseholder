@@ -5,3 +5,5 @@ pymysql
 python-dotenv
 pandas
 numpy
+mysql-connector
+sqlalchemy
