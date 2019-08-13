@@ -2,8 +2,9 @@
 *.log
 *.vscode
 *.xlsx
-*.ipynb_checkpoints
 *.ipynb
 \__pycache__
 DCRDataBaseUtility.py
-
+backup
+data
+*.pyc
