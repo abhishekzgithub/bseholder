@@ -33,6 +33,8 @@ def main(obj,**kwargs):
 
 if __name__=='__main__':
     try:
+        tup=tuple()
+        dic=dict()
         for bseid in bseticker:
             logging.info(f"{bseid} has started")
             for qtrid in period_id:
@@ -42,16 +44,21 @@ if __name__=='__main__':
                     obj1=PromoterNGroup(URL)
                     if obj1.check_availability==False:
                         continue
+                    dic[tuple(obj1.get_column_name())]=1
                     logging.info(f"{obj1.get_column_name()}")
                     result=main(obj1)
                     logging.info(f"df PromoterNGroup has {bseid} and {qtrid} been created ")
+                except IndexError as ie:
+                    logging.info(f"exception in PromoterNGroup having {bseid} and {qtrid} has  index error and thus continue ")
+                    logging.info(f"{ie}{format_exc()}")
+                    continue
                 except (ValueError,Exception) as v:
-                    logging.info(f"{format_exc()}")
+                    #logging.info(f"{format_exc()}")
                     try:
                         obj2=PromoterNGroupVariation(URL)
                         if obj2.check_availability==False:
                             continue
-                        logging.info(f"{obj2.get_column_name()}")
+                        #logging.info(f"{obj2.get_column_name()}")
                         result=main(obj2)
                         logging.info(f"In Exception df PromoterNGroupVariation has {bseid} and {qtrid} been created ")
                     except ValueError as v:
@@ -59,16 +66,48 @@ if __name__=='__main__':
                             obj3=PromoterNGroupVariation7Cols(URL)
                             if obj3.check_availability==False:
                                 continue
-                            logging.info(f"{obj3.get_column_name()}")
+                            #logging.info(f"{obj3.get_column_name()}")
                             result=main(obj3)
                             logging.info(f"In Exception df PromoterNGroupVariation7Cols has {bseid} and {qtrid} been created ")
                         except ValueError as v:
-                            obj4=PromoterNGroupVariation9Cols(URL)
-                            if obj4.check_availability==False:
-                                continue
-                            logging.info(f"{obj4.get_column_name()}")
-                            result=main(obj4)
-                            logging.info(f"In Exception df PromoterNGroupVariation7Cols has {bseid} and {qtrid} been created ")
+                            try:
+                                obj4=PromoterNGroupVariation9Cols(URL)
+                                if obj4.check_availability==False:
+                                    continue
+                                #logging.info(f"{obj4.get_column_name()}")
+                                result=main(obj4)
+                                logging.info(f"In Exception df PromoterNGroupVariation9Cols has {bseid} and {qtrid} been created ")
+                            except ValueError as v:
+                                try:
+                                    obj4=PromoterNGroupVariation11Cols(URL)
+                                    if obj4.check_availability==False:
+                                        continue
+                                    #logging.info(f"{obj4.get_column_name()}")
+                                    result=main(obj4)
+                                    logging.info(f"In Exception df PromoterNGroupVariation11Cols has {bseid} and {qtrid} been created ")
+                                except ValueError as v:
+                                    try:
+                                        obj4=PromoterNGroupVariation12Cols(URL)
+                                        if obj4.check_availability==False:
+                                            continue
+                                        #logging.info(f"{obj4.get_column_name()}")
+                                        result=main(obj4)
+                                        logging.info(f"In Exception df PromoterNGroupVariation12Cols has {bseid} and {qtrid} been created ")
+                                    except ValueError as v:
+                                        try:
+                                            obj4=PromoterNGroupVariation13Cols(URL)
+                                            if obj4.check_availability==False:
+                                                continue
+                                            #logging.info(f"{obj4.get_column_name()}")
+                                            result=main(obj4)
+                                            logging.info(f"In Exception df PromoterNGroupVariation13Cols has {bseid} and {qtrid} been created ")
+                                        except ValueError as v:
+                                            print(v)
+                                            logging.info(f"Unhandled the exception in {URL}")
+                                            logging.info(f"the exception is {format_exc()}")
+
             logging.info(f"{bseid} and {qtrid} has finished")
     except Exception as e:
         logging.info(f"Finally the exception is {format_exc()}")
+    finally:
+        logging.info(f"list of columns as {dic}")

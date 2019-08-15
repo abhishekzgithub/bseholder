@@ -181,9 +181,87 @@ class PromoterNGroupVariation11Cols(PromoterNGroup):
         df1.columns=self.get_extra_col_df(cols)
         return df1
 
+"""
+ValueError: Length mismatch: Expected axis has 5 elements, new values have 12 elements
+"""        
+class PromoterNGroupVariation12Cols(PromoterNGroup):
+    """
+    e.g. URL='https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=533292&qtrid=89'
+    """
+    def __init__(self,URL):
+        self.URL=URL
+        self.r = requests.get(self.URL)
+        self.tree = html.fromstring(self.r.content)
+    
+    def get_extra_col_df(self,cols):
+        df=pd.DataFrame()
+        for ix,val in enumerate(cols):
+            if ix==6:
+                df[cols[ix]+'->'+cols[-2]]=" "
+                df[cols[ix]+'->'+cols[-1]]=" "
+                continue
+            if ix==7:
+                df[cols[ix]+'->'+cols[-2]]=" "
+                df[cols[ix]+'->'+cols[-1]]=" "
+                continue
+            elif ix>8:
+                pass
+            else:
+                df[val]=" "
+        return list(df.columns[1:])    
 
 
+    def fit_data(self,cols):
+        datum=self.get_data()
+        data={}
+        j=1
+        for i in range(0,len(datum),10):
+            data[j]=datum[i:i+10]
+            j+=1
+        df1=pd.DataFrame(data).T
+        df1.columns=self.get_extra_col_df(cols)
+        return df1
 
+"""
+ValueError: Length mismatch: Expected axis has 5 elements, new values have 13 elements
+"""        
+class PromoterNGroupVariation13Cols(PromoterNGroup):
+    """
+    e.g. URL='https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=506074&qtrid=97'
+    """
+    def __init__(self,URL):
+        self.URL=URL
+        self.r = requests.get(self.URL)
+        self.tree = html.fromstring(self.r.content)
+    
+    def get_extra_col_df(self,cols):
+        df=pd.DataFrame()
+        for ix,val in enumerate(cols):
+            if ix==7:
+                df[cols[ix]+'->'+cols[-2]]=" "
+                df[cols[ix]+'->'+cols[-1]]=" "
+                continue
+            if ix==8:
+                df[cols[ix]+'->'+cols[-2]]=" "
+                df[cols[ix]+'->'+cols[-1]]=" "
+                continue
+            elif ix>9:
+                pass
+            else:
+                df[val]=" "
+        return list(df.columns[1:])    
+
+
+    def fit_data(self,cols):
+        datum=self.get_data()
+        data={}
+        j=1
+        for i in range(0,len(datum),11):
+            data[j]=datum[i:i+11]
+            j+=1
+        df1=pd.DataFrame(data).T
+        df1.columns=self.get_extra_col_df(cols)
+        return df1
 
 
 
