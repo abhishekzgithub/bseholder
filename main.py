@@ -82,12 +82,76 @@ class PromoterNGroupVariation(PromoterNGroup):
         return df1
 
 class PromoterNGroupVariation7Cols(PromoterNGroup):
-    #todo
+    """
+    e.g. URL='https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=500124&qtrid=89'
+    this has 6 columns excluding the category ones
+    """
     def __init__(self,URL):
         self.URL=URL
         self.r = requests.get(self.URL)
         self.tree = html.fromstring(self.r.content)
 
+    def fit_data(self,cols):
+        datum=self.get_data()
+        data={}
+        j=1
+        for i in range(0,len(datum),6):
+            data[j]=datum[i:i+6]
+            j+=1
+        df1=pd.DataFrame(data).T
+        df1.columns=(self.get_column_name())[1:]
+        return df1
+
+"""
+Length mismatch: Expected axis has 5 elements, new values have 9 elements
+"""
+class PromoterNGroupVariation9Cols(PromoterNGroup):
+    """
+    e.g. URL='https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=500124&qtrid=89'
+    this has 6 columns excluding the category ones
+    """
+    def __init__(self,URL):
+        self.URL=URL
+        self.r = requests.get(self.URL)
+        self.tree = html.fromstring(self.r.content)
+    
+    def get_extra_col_df(self,cols):
+        df=pd.DataFrame()
+        for ix,val in enumerate(cols):
+            if ix==6:
+                df[cols[ix]+'->'+cols[-2]]=" "
+                df[cols[ix]+'->'+cols[-1]]=" "
+                continue
+            elif ix>=8:
+                pass
+            else:
+                df[val]=" "
+        return list(df.columns[1:])    
+
+
+    def fit_data(self,cols):
+        datum=self.get_data()
+        data={}
+        j=1
+        for i in range(0,len(datum),8):
+            data[j]=datum[i:i+8]
+            j+=1
+        df1=pd.DataFrame(data).T
+        df1.columns=self.get_extra_col_df(cols)
+        return df1
+"""
+ValueError: Length mismatch: Expected axis has 5 elements, new values have 11 elements
+"""
+class PromoterNGroupVariation11Cols(PromoterNGroup):
+    """
+    e.g. URL='https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=533022&qtrid=89'
+    this has 9 columns excluding the category ones
+    """
+    def __init__(self,URL):
+        self.URL=URL
+        self.r = requests.get(self.URL)
+        self.tree = html.fromstring(self.r.content)
+    
     def get_extra_col_df(self,cols):
         df=pd.DataFrame()
         for ix,val in enumerate(cols):
@@ -95,22 +159,33 @@ class PromoterNGroupVariation7Cols(PromoterNGroup):
                 df[cols[ix]+'->'+cols[-2]]=" "
                 df[cols[ix]+'->'+cols[-1]]=" "
                 continue
-            elif ix>=7:
+            if ix==6:
+                df[cols[ix]+'->'+cols[-2]]=" "
+                df[cols[ix]+'->'+cols[-1]]=" "
+                continue
+            elif ix>=8:
                 pass
             else:
                 df[val]=" "
-        return list(df.columns[1:])
+        return list(df.columns[1:])    
+
 
     def fit_data(self,cols):
         datum=self.get_data()
         data={}
         j=1
-        for i in range(0,len(datum),7):
-            data[j]=datum[i:i+7]
+        for i in range(0,len(datum),9):
+            data[j]=datum[i:i+9]
             j+=1
         df1=pd.DataFrame(data).T
         df1.columns=self.get_extra_col_df(cols)
         return df1
+
+
+
+
+
+
 
 # if __name__=='__main__':
 #     try:
