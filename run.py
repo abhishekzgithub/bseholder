@@ -7,7 +7,7 @@ import utility
 from traceback import format_exc
 from pdb import set_trace
 
-logging.basicConfig(filename='output.log',level=logging.INFO,format=utility.LOG_FORMAT)
+logging.basicConfig(filename='output.log',filemode='w',level=logging.INFO,format=utility.LOG_FORMAT)
 
 #URL=f'https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd={BSETicker}&qtrid={period_id}
 
@@ -36,6 +36,7 @@ if __name__=='__main__':
                     obj1=PromoterNGroup(URL)
                     if obj1.check_availability==False:
                         continue
+                    logging.debug(f"{obj1.get_column_name(self,tree)}")
                     df=obj1.col_having_six()
                     #set_trace()
                     logging.info(f"df PromoterNGroup has {bseid} and {qtrid} been created ")
@@ -46,7 +47,7 @@ if __name__=='__main__':
                     if obj2.check_availability==False:
                         continue
                     df=obj2.col_having_six()
-                    logging.info(f"df PromoterNGroupVariation has {bseid} and {qtrid} been created ")
+                    logging.info(f"In Exception df PromoterNGroupVariation has {bseid} and {qtrid} been created ")
                     #sql_obj.append_db(df,conn=tmp_table_conn,tabl_name="tmp_tbl_company_extracols",schema='tmp')
             logging.info(f"{bseid} and {qtrid} has finished")
     except Exception as e:
