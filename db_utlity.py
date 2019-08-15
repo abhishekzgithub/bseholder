@@ -4,6 +4,7 @@ from dotenv import load_dotenv,find_dotenv
 import sqlalchemy
 import os
 load_dotenv(find_dotenv())
+
 class MysqlConn(object):
     def __init__(self):
         self.host=os.getenv("host")

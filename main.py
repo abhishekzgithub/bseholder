@@ -2,11 +2,20 @@ import requests
 import pandas as pd
 from lxml import html
 import re
+from pdb import set_trace
 
 class PromoterNGroup(object):
     def __init__(self,URL):
         self.URL=URL
-
+    def check_availability(self):
+        status=True
+        r = requests.get(self.URL)
+        r_status=r.status_code
+        tree = html.fromstring(r.content)
+        empty=(tree.xpath("//td[contains(text(),'Category of shareholder')]/text()"))
+        if r_status in (404,'404') and empty=='Category of shareholder':
+            status=False
+        return status
     def get_column_name(self,tree):
         cols=tree.find_class('innertable_header1')
         cols=[cols[i].text_content().encode('ascii', 'ignore').decode("utf-8") for i in range(len(cols))]
@@ -69,12 +78,13 @@ class PromoterNGroupVariation(PromoterNGroup):
         df1=pd.DataFrame(data).T
         df1.columns=self.get_extra_col_df(cols)
         return df1
-if __name__=='__main__':
-    try:
-        URL=''
-        obj1=PromoterNGroup(URL)
-        df=obj1.col_having_six()
-    except ValueError as v:
-        obj1=PromoterNGroupVariation(URL)
-        df=obj1.col_having_six()
+
+# if __name__=='__main__':
+#     try:
+#         URL=''
+#         obj1=PromoterNGroup(URL)
+#         df=obj1.col_having_six()
+#     except ValueError as v:
+#         obj1=PromoterNGroupVariation(URL)
+#         df=obj1.col_having_six()
         
