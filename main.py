@@ -101,8 +101,8 @@ class PromoterNGroupVariation7Cols(PromoterNGroup):
                 df[val]=" "
         return list(df.columns[1:])
 
-    def fit_data(self,tree,cols):
-        datum=self.get_data(tree)
+    def fit_data(self,cols):
+        datum=self.get_data()
         data={}
         j=1
         for i in range(0,len(datum),7):
