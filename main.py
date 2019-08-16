@@ -263,8 +263,53 @@ class PromoterNGroupVariation13Cols(PromoterNGroup):
         df1.columns=self.get_extra_col_df(cols)
         return df1
 
+"""
+ValueError: Length mismatch: Expected axis has 5 elements, new values have 17 elements
+"""
+class PromoterNGroupVariation17Cols(PromoterNGroup):
+    """
+    e.g. URL='https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=532759&qtrid=93'
+    """
+    def __init__(self,URL):
+        self.URL=URL
+        self.r = requests.get(self.URL)
+        self.tree = html.fromstring(self.r.content)
+    
+    def get_extra_col_df(self,cols):
+        df=pd.DataFrame()
+        for ix,val in enumerate(cols):
+            if ix==5:
+                df[cols[ix]+'->'+cols[15]]=" "
+                df[cols[ix]+'->'+cols[16]]=" "
+                df[cols[ix]+'->'+cols[10]]=" "
+                df[cols[ix]+'->'+cols[17]]=" "
+                continue
+            if ix==6:
+                df[cols[ix]+'->'+cols[11]]=" "
+                df[cols[ix]+'->'+cols[12]]=" "
+                continue
+            if ix==7:
+                df[cols[ix]+'->'+cols[13]]=" "
+                df[cols[ix]+'->'+cols[14]]=" "
+            elif ix>8:
+                pass
+            else:
+                df[val]=" "
+        return list(df.columns[1:])    
 
 
+    def fit_data(self,cols):
+        datum=self.get_data()
+        firstcols=self.get_right_column_data()
+        data={}
+        j=1
+        matrix_size=int(len(datum)/len(firstcols))
+        for i in range(0,len(datum),matrix_size):
+            data[j]=datum[i:i+matrix_size]
+            j+=1
+        df1=pd.DataFrame(data).T
+        df1.columns=self.get_extra_col_df(cols)
+        return df1
 # if __name__=='__main__':
 #     try:
 #         URL=''
