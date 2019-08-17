@@ -21,14 +21,19 @@ logging.basicConfig(filename='output.log',filemode='w',level=logging.INFO,format
 # conn=pymysql_obj.pymysql_connect()
 #df_bseid_qtrid=pymysql_obj.pymysql_get_dataframe(query=utility.q,conn=conn)
 #df_bseid_qtrid.to_csv("df_bseid_qtrid.csv",index=False)
+
 df_bseid_qtrid=pd.read_csv('df_bseid_qtrid.csv')
 logging.info("bseid has been quried successfully")
 bsetickerid=list(df_bseid_qtrid['BSETicker'])
 logging.info(f"bseid has length of {len(bsetickerid)}")
+
 columns_type_df=pd.read_csv("unique_type_columns.csv")
 
-def save_df(df,tabl_name="tmp_tbl_company_extracols"):
-    sql_obj.append_db(df,conn=tmp_table_conn,tabl_name=tabl_name,schema='tmp')
+def save_df(df,tabl_name="tmp_tbl_company_extracols",local_save=True,caseid="",filename=""):
+    if not local_save:
+        sql_obj.append_db(df,conn=tmp_table_conn,tabl_name=tabl_name,schema='tmp')
+    else:
+        df.to_csv(str(filename)+".csv",index=False)
 
 def init(bseticker=[]):
     try:
@@ -45,7 +50,7 @@ def init(bseticker=[]):
                     columns,status=get_column_name(tree)
                     if not status and columns==[]:
                         continue
-                    case_type=df2[df2.cols==columns].case
+                    case_type=int(list(df2[df2.cols==columns].case)[0])
                     if case_type==1:
                         df=Case1(tree).final_result()
                     elif case_type==2:
@@ -66,11 +71,11 @@ def init(bseticker=[]):
                         df=Case9(tree).final_result()
                     elif case_type==10:
                         df=Case10(tree).final_result()
-                    save_df(df)
-                except:
-                    pass
-    except:
-        pass
+                    save_df(df,filename=str(bseid)+str(qtrid))
+                except Exception as e:
+                    print(e)
+    except Exception as e:
+        print(e)
 
 if __name__=='__main__':
     print("Program has started")

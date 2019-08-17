@@ -39,4 +39,4 @@ class PromoterNGroup(object):
     def final_result(self):
         df=self.set_data()
         df.columns=self.set_column_name()
-        return df.replace(r'^\s*$', 0, regex=True)        
+        return df.replace(r'^\s*$', 0, regex=True)
