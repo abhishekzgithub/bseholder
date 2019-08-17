@@ -56,13 +56,14 @@ def init(bseticker=[]):
                     elif case_type==2:
                         df=Case2(tree).final_result()
                     elif case_type==3:
-                        df=Case3(tree).final_result()
+                        df=Case2(tree).final_result()
                     elif case_type==4:
-                        df=Case4(tree).final_result()
+                        df=Case3(tree).final_result()
                     elif case_type==5:
-                        df=Case5(tree).final_result()
+                        df=Case4(tree).final_result()
                     elif case_type==6:
-                        df=Case6(tree).final_result()
+                        df=Case5(tree).final_result()
+                    #todo
                     elif case_type==7:
                         df=Case7(tree).final_result()
                     elif case_type==8:

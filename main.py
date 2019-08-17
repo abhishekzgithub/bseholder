@@ -33,7 +33,7 @@ class PromoterNGroup(object):
         return df
     
     def set_column_name(self):
-        col_name=self.cols()
+        col_name=self.cols
         return col_name
     
     def final_result(self):
