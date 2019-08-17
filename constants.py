@@ -1,3 +1,6 @@
+period_id=[89,93,97,100,101,102]
+
+
 LOG_FORMAT = "[%(asctime)s]-{%(pathname)s:%(lineno)d}-{%(levelname)s}-{In file ->%(module)s " \
              "In function ->%(funcName)s}-{%(message)s}"
 q="""select (BSETicker) from TblCompany where Ticker != '' and BSETicker != '' and BSETicker is not Null;"""

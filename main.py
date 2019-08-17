@@ -5,12 +5,9 @@ import re
 from pdb import set_trace
 
 class PromoterNGroup(object):
-    def __init__(self,tree):
+    def __init__(self,tree,cols):
         self.tree = tree
-    def get_column_name(self):
-        cols=self.tree.find_class('innertable_header1')
-        cols=[i.text_content().encode('ascii', 'ignore').decode("utf-8") for i in (cols)]
-        return cols
+        self.cols = cols
     
     def get_data(self):
         all_cols=self.tree.find_class('TTRow_right')
@@ -36,21 +33,10 @@ class PromoterNGroup(object):
         return df
     
     def set_column_name(self):
-        col_name=self.get_column_name()
+        col_name=self.cols()
         return col_name
     
     def final_result(self):
         df=self.set_data()
         df.columns=self.set_column_name()
-        return df.replace(r'^\s*$', 0, regex=True)
-
-
-# if __name__=='__main__':
-#     try:
-#         URL=''
-#         obj1=PromoterNGroup(URL)
-#         df=obj1.col_having_six()
-#     except ValueError as v:
-#         obj1=PromoterNGroupVariation(URL)
-#         df=obj1.col_having_six()
-        
+        return df.replace(r'^\s*$', 0, regex=True)        
