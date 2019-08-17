@@ -52,26 +52,72 @@ def init(bseticker=[]):
                         continue
                     case_type=int(list(df2[df2.cols==columns].case)[0])
                     if case_type==1:
-                        df=Case1(tree).final_result()
+                        df=Case1(tree,columns).final_result()
                     elif case_type==2:
-                        df=Case2(tree).final_result()
+                        df=Case2(tree,columns).final_result()
                     elif case_type==3:
-                        df=Case2(tree).final_result()
+                        df=Case2(tree,columns).final_result()
                     elif case_type==4:
-                        df=Case3(tree).final_result()
+                        df=Case3(tree,columns).final_result()
                     elif case_type==5:
-                        df=Case4(tree).final_result()
+                        df=Case4(tree,columns).final_result()
                     elif case_type==6:
-                        df=Case5(tree).final_result()
-                    #todo
+                        df=Case5(tree,columns).final_result()
                     elif case_type==7:
-                        df=Case7(tree).final_result()
+                        df=Case4(tree,columns).final_result()
                     elif case_type==8:
-                        df=Case8(tree).final_result()
+                        df=Case6(tree,columns).final_result()
                     elif case_type==9:
-                        df=Case9(tree).final_result()
+                        df=Case7(tree,columns).final_result()
                     elif case_type==10:
-                        df=Case10(tree).final_result()
+                        df=Case8(tree,columns).final_result()
+                    elif case_type==10:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==11:
+                        df=Case8(tree,columns).final_result()
+                    elif case_type==12:
+                        df=Case8(tree,columns).final_result()
+                    elif case_type==13:
+                        df=Case8(tree,columns).final_result()
+                    elif case_type==14:
+                        df=Case8(tree,columns).final_result()
+                    elif case_type==15:
+                        df=Case8(tree,columns).final_result()
+                    elif case_type==16:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==17:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==18:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==19:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==20:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==21:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==22:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==23:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==24:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==25:
+                        df=Case8(tree,columns).final_result()
+                        #todo
+                    elif case_type==26:
+                        df=Case8(tree,columns).final_result()
+                        
+                        
                     save_df(df,filename=str(bseid)+str(qtrid))
                 except Exception as e:
                     print(e)

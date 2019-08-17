@@ -65,6 +65,7 @@ class Case4(PromoterNGroup):
             if ix==8:
                 df[self.cols[ix]+'->'+self.cols[14]]=" "
                 df[self.cols[ix]+'->'+self.cols[15]]=" "
+                continue
             elif ix>9:
                 pass
             else:
@@ -91,6 +92,7 @@ class Case5(PromoterNGroup):
             if ix==9:
                 df[self.cols[ix]+'->'+self.cols[15]]=" "
                 df[self.cols[ix]+'->'+self.cols[16]]=" "
+                continue
             elif ix>10:
                 pass
             else:
@@ -98,22 +100,73 @@ class Case5(PromoterNGroup):
         return list(df.columns)
 
 class Case6(PromoterNGroup):
-    def __init__(self,tree):
+    def __init__(self,tree,cols):
         self.tree = tree
+        self.cols = cols
     def set_column_name(self):
-        pass
+        df=pd.DataFrame()
+        for ix,val in enumerate(self.cols):
+            if ix==5:
+                df[self.cols[ix]+'->'+self.cols[9]]=" "
+                df[self.cols[ix]+'->'+self.cols[10]]=" "
+                df[self.cols[ix]+'->'+self.cols[8]]=" "
+                df[self.cols[ix]+'->'+self.cols[11]]=" "
+                continue
+            elif ix>6:
+                pass
+            else:
+                df[val]=" "
+        return list(df.columns)
 
 class Case7(PromoterNGroup):
-    def __init__(self,tree):
+    def __init__(self,tree,cols):
         self.tree = tree
+        self.cols = cols
     def set_column_name(self):
-        pass
+        df=pd.DataFrame()
+        for ix,val in enumerate(self.cols):
+            if ix==5:
+                df[self.cols[ix]+'->'+self.cols[12]]=" "
+                df[self.cols[ix]+'->'+self.cols[13]]=" "
+                df[self.cols[ix]+'->'+self.cols[9]]=" "
+                df[self.cols[ix]+'->'+self.cols[14]]=" "
+                continue
+            if ix==6:
+                df[self.cols[ix]+'->'+self.cols[10]]=" "
+                df[self.cols[ix]+'->'+self.cols[11]]=" "
+                continue
+            elif ix>7:
+                pass
+            else:
+                df[val]=" "
+        return list(df.columns)
 
 class Case8(PromoterNGroup):
-    def __init__(self,tree):
+    def __init__(self,tree,cols):
         self.tree = tree
+        self.cols = cols
     def set_column_name(self):
-        pass
+        df=pd.DataFrame()
+        for ix,val in enumerate(self.cols):
+            if ix==5:
+                df[self.cols[ix]+'->'+self.cols[15]]=" "
+                df[self.cols[ix]+'->'+self.cols[16]]=" "
+                df[self.cols[ix]+'->'+self.cols[10]]=" "
+                df[self.cols[ix]+'->'+self.cols[17]]=" "
+                continue
+            if ix==6:
+                df[self.cols[ix]+'->'+self.cols[11]]=" "
+                df[self.cols[ix]+'->'+self.cols[12]]=" "
+                continue
+            if ix==7:
+                df[self.cols[ix]+'->'+self.cols[13]]=" "
+                df[self.cols[ix]+'->'+self.cols[14]]=" "
+                continue
+            elif ix>8:
+                pass
+            else:
+                df[val]=" "
+        return list(df.columns)
 
 class Case9 (PromoterNGroup):
     def __init__(self,tree):
