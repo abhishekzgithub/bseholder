@@ -3,6 +3,7 @@ from lxml import html
 import logging
 from traceback import format_exc
 from pdb import set_trace
+import os
 
 from main import *
 from extended_main import *
@@ -11,7 +12,7 @@ from utility import *
 import constants
 
 logging.basicConfig(filename='output.log',filemode='w',level=logging.INFO,format=constants.LOG_FORMAT)
-
+SCRAPED_DATA=os.path.join(os.getcwd(),"scraped_data")
 #URL=f'https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd={BSETicker}&qtrid={period_id}
 
 #get the bseticker id from the database
@@ -33,13 +34,14 @@ def save_df(df,tabl_name="tmp_tbl_company_extracols",local_save=True,caseid="",f
     if not local_save:
         sql_obj.append_db(df,conn=tmp_table_conn,tabl_name=tabl_name,schema='tmp')
     else:
-        df.to_csv(str(filename)+".csv",index=False)
+        df.to_csv(os.path.join(os.getcwd(),"scraped_data",str(filename)+".csv"),index=False)
 
 def init(bseticker=[]):
     try:
         for bseid in bseticker:
             logging.info(f"{bseid} has started")
-            for qtrid in period_id:
+            
+            for qtrid in constants.period_id:
                 URL=f'https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd={str(bseid)}&qtrid={str(qtrid)}'
                 logging.info(f"{URL}")
                 try:
@@ -50,7 +52,7 @@ def init(bseticker=[]):
                     columns,status=get_column_name(tree)
                     if not status and columns==[]:
                         continue
-                    case_type=int(list(columns_type_df[columns_type_df.cols==columns].case)[0])
+                    case_type=int(list(columns_type_df[columns_type_df.cols==str(tuple(columns))].case)[0])
                     if case_type==1:
                         df=Case1(tree,columns).final_result()
                     elif case_type==2:
@@ -145,7 +147,7 @@ def init(bseticker=[]):
                         df=Case20(tree,columns).final_result()
                     elif case_type==46:
                         df=Case9(tree,columns).final_result()
-                    save_df(df,filename=str(bseid)+str(qtrid))
+                    save_df(df,filename="BSEID as "+str(bseid)+"qtrid as "+str(qtrid))
                 except Exception as e:
                     print(e)
                     logging.info(f"{e}{format_exc()}")

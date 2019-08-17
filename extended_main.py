@@ -384,9 +384,6 @@ class Case19(PromoterNGroup):
         return list(df.columns)
 
 class Case20(PromoterNGroup):
-    """
-    Length mismatch: Expected axis has 9 elements, new values have 10 elements
-    """
     def __init__(self,tree,cols):
         self.tree = tree
         self.cols = cols
@@ -402,11 +399,4 @@ class Case20(PromoterNGroup):
             else:
                 df[val]=" "
         return list(df.columns)
-    
-class Case15(PromoterNGroup):
-    def __init__(self,tree,cols):
-        self.tree = tree
-        self.cols = cols
-    def set_column_name(self):
-        pass    
                     
