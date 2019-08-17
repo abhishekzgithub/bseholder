@@ -3,9 +3,10 @@ from db_utlity import *
 import requests
 from lxml import html
 import logging
-import utility
+from utility import *
 from traceback import format_exc
 from pdb import set_trace
+import constants
 
 logging.basicConfig(filename='output.log',filemode='w',level=logging.INFO,format=utility.LOG_FORMAT)
 
@@ -32,21 +33,23 @@ def main(obj,**kwargs):
 
 def init(bseticker=[]):
     try:
-        tup=tuple()
-        dic=dict()
-        col_uniq=set()
+        # tup=tuple()
+        # dic=dict()
+        # col_uniq=set()
         for bseid in bseticker:
             logging.info(f"{bseid} has started")
             for qtrid in period_id:
                 URL=f'https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd={str(bseid)}&qtrid={str(qtrid)}'
                 logging.info(f"{URL}")
                 try:
-                    obj1=PromoterNGroup(URL)
-                    if obj1.check_availability==False:
+                    r = requests.get(URL)
+                    tree = html.fromstring(r.content)
+                    if check_availability(r,tree)==False:
                         continue
+                    obj1=PromoterNGroup(tree)
                     val=obj1.get_column_name()
-                    dic[tuple(val)]=URL
-                    col_uniq.update(set(val))
+                    #dic[tuple(val)]=URL
+                    #col_uniq.update(set(val))
                     #continue
                     logging.info(f"{obj1.get_column_name()}")
                     result=main(obj1)
