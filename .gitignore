@@ -11,4 +11,3 @@ data
 \.env
 *.env
 .ipynb_checkpoints
-scraped_data
