@@ -50,7 +50,7 @@ def init(bseticker=[]):
                     columns,status=get_column_name(tree)
                     if not status and columns==[]:
                         continue
-                    case_type=int(list(df2[df2.cols==columns].case)[0])
+                    case_type=int(list(columns_type_df[columns_type_df.cols==columns].case)[0])
                     if case_type==1:
                         df=Case1(tree,columns).final_result()
                     elif case_type==2:
@@ -156,4 +156,4 @@ def init(bseticker=[]):
 
 if __name__=='__main__':
     print("Program has started")
-    #init(bseticker=bsetickerid)
+    init(bseticker=bsetickerid)
