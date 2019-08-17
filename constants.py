@@ -1,5 +1,6 @@
 period_id=[89,93,97,100,101,102]
-
+four_subcol=["Class eg: X","Class eg:y","Total as a % of (A+B+C)","Total"]
+two_subcol=["No.(a)","As a % of total Shares held(b)"]
 
 LOG_FORMAT = "[%(asctime)s]-{%(pathname)s:%(lineno)d}-{%(levelname)s}-{In file ->%(module)s " \
              "In function ->%(funcName)s}-{%(message)s}"
