@@ -226,8 +226,8 @@ class Case12(PromoterNGroup):
         df=pd.DataFrame()
         for ix,val in enumerate(self.cols):
             if ix==5 or ix==6:
-                df[self.cols[ix]+'->'+self.cols[-2]]=" "
-                df[self.cols[ix]+'->'+self.cols[-1]]=" "
+                df[self.cols[ix]+'->'+two_subcol[0]]=" "
+                df[self.cols[ix]+'->'+two_subcol[1]]=" "
                 continue
             elif ix>7:
                 pass

@@ -96,7 +96,7 @@ def init(bseticker=[]):
                     elif case_type==20:
                         df=Case11(tree,columns).final_result()
                     elif case_type==21:
-                        df=Case1(tree,columns).final_result()
+                        df=Case12(tree,columns).final_result()
                     elif case_type==22:
                         df=Case1(tree,columns).final_result()
                     elif case_type==23:
@@ -147,10 +147,12 @@ def init(bseticker=[]):
                         df=Case20(tree,columns).final_result()
                     elif case_type==46:
                         df=Case9(tree,columns).final_result()
-                    save_df(df,filename="BSEID as "+str(bseid)+"qtrid as "+str(qtrid))
+                    df['bseid']=bseid
+                    df['qtrid']=qtrid
+                    save_df(df,filename="BSEID_"+str(bseid)+"_qtrid_"+str(qtrid))
                 except Exception as e:
-                    print(e)
-                    logging.info(f"{e}{format_exc()}")
+                    print(e,case_type)
+                    logging.info(f"{e}{format_exc()}{case_type}{URL}")
 
     except Exception as e:
         print(e)
