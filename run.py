@@ -18,20 +18,19 @@ SCRAPED_DATA=os.path.join(os.getcwd(),"scraped_data")
 
 
 #get the bseticker id from the database
-sql_obj=SQlAlchemyOperation()
-tmp_table_conn=sql_obj.get_sqlalchemy_conn(database_name="tmp")
-pymysql_obj=MysqlConn()
-conn=pymysql_obj.pymysql_connect()
-df_bseid_qtrid=pymysql_obj.pymysql_get_dataframe(query=constants.q,conn=conn)
-#df_bseid_qtrid.to_csv("df_bseid_qtrid.csv",index=False)
+# sql_obj=SQlAlchemyOperation()
+# tmp_table_conn=sql_obj.get_sqlalchemy_conn(database_name="tmp")
+# pymysql_obj=MysqlConn()
+# conn=pymysql_obj.pymysql_connect()
+# df_bseid_qtrid=pymysql_obj.pymysql_get_dataframe(query=constants.q,conn=conn)
+# df_bseid_qtrid.to_csv("df_bseid_qtrid.csv",index=False)
 
-#df_bseid_qtrid=pd.read_csv('df_bseid_qtrid.csv')
+df_bseid_qtrid=pd.read_csv('df_bseid_qtrid.csv')
 logging.info("bseid has been quried successfully")
 bsetickerid=list(df_bseid_qtrid['BSETicker'])
-#logging.info(f"bseid has length of {len(bsetickerid)}")
+logging.info(f"bseid has length of {len(bsetickerid)}")
 
 columns_type_df=pd.read_csv("unique_type_columns.csv")
-
 
 
 def save_df(df,tabl_name="tmp_tbl_company_extracols",local_save=True,caseid="",filename="",action="fail"):
@@ -154,9 +153,7 @@ def init(bseticker=[]):
                         df=Case9(tree,columns).final_result()
                     df['bseid']=bseid
                     df['qtrid']=qtrid
-                    #final_df=final_df.append(df,ignore_index=True)
                     final_df=pd.concat([final_df,df],ignore_index=True)
-                    #save_df(df,filename="BSEID_"+str(bseid)+"_qtrid_"+str(qtrid))
                 except Exception as e:
                     print("In Exception inner",e,case_type,URL,sep="\n")
                     url_exeception.append(URL)
@@ -164,7 +161,8 @@ def init(bseticker=[]):
 
     except Exception as e:
         print(e)
-        logging.info(f"{e} \n {format_exc()}")
+        url_exeception.append(URL)
+        logging.info(f"{e} \n {format_exc()}{URL}")
     finally:
         logging.info(f"exceptional urls are {url_exeception}")
         save_df(final_df,filename="final_df")
