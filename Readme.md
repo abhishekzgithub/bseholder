@@ -1,11 +1,3 @@
-goto 
-1.https://www.bseindia.com/index.html
-2.corporates tab
-3.corporate fillings
-4.Shareholding Patterns
-
-
-
 # [Bombay Stock Exchange Shareholding Pattern](https://www.bseindia.com/index.html)
 
 ## Introduction
@@ -42,6 +34,8 @@ This is a scraping script made in order to scrape the data from bombay stock exc
  2. Goto **Corporates** tab
  3. Goto the **Corporate Fillings** tab
  4. Then goto **Shareholding Patterns**
+ 5. For bseid 539807 and quarter 102, this will lead to
+    * >https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd=539807&qtrid=102 
 
  ## Thanks
  Please give star if you are using or like it.
