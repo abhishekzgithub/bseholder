@@ -34,6 +34,6 @@ class SQlAlchemyOperation(object):
                                                format(self.user, self.password, 
                                                       self.host, database_name))
 
-    def append_db(self,df,conn="",tabl_name="tmp_tbl_company",schema='tmp'):    
+    def append_db(self,df,conn="",tabl_name="tmp_tbl_company",schema='tmp',action="fail"):    
         #df.to_sql(con=database_connection,name='tmp_tbl_company',schema='tmp',if_exists='append',index=False)
-        df.to_sql(con=conn,name=tabl_name,schema=schema,if_exists='append',index=False)
+        df.to_sql(con=conn,name=tabl_name,schema=schema,if_exists=action,index=False)

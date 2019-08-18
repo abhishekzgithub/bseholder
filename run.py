@@ -16,31 +16,34 @@ SCRAPED_DATA=os.path.join(os.getcwd(),"scraped_data")
 #URL=f'https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd={BSETicker}&qtrid={period_id}
 
 #get the bseticker id from the database
-# sql_obj=SQlAlchemyOperation()
-# tmp_table_conn=sql_obj.get_sqlalchemy_conn(database_name="tmp")
+sql_obj=SQlAlchemyOperation()
+tmp_table_conn=sql_obj.get_sqlalchemy_conn(database_name="tmp")
 # pymysql_obj=MysqlConn()
 # conn=pymysql_obj.pymysql_connect()
-#df_bseid_qtrid=pymysql_obj.pymysql_get_dataframe(query=utility.q,conn=conn)
+df_bseid_qtrid=pymysql_obj.pymysql_get_dataframe(query=utility.q,conn=conn)
 #df_bseid_qtrid.to_csv("df_bseid_qtrid.csv",index=False)
 
-df_bseid_qtrid=pd.read_csv('df_bseid_qtrid.csv')
-logging.info("bseid has been quried successfully")
-bsetickerid=list(df_bseid_qtrid['BSETicker'])
-logging.info(f"bseid has length of {len(bsetickerid)}")
+#df_bseid_qtrid=pd.read_csv('df_bseid_qtrid.csv')
+#logging.info("bseid has been quried successfully")
+#bsetickerid=list(df_bseid_qtrid['BSETicker'])
+#logging.info(f"bseid has length of {len(bsetickerid)}")
 
 columns_type_df=pd.read_csv("unique_type_columns.csv")
 
-def save_df(df,tabl_name="tmp_tbl_company_extracols",local_save=True,caseid="",filename=""):
+
+
+def save_df(df,tabl_name="tmp_tbl_company_extracols",local_save=True,caseid="",filename="",action="fail"):
     if not local_save:
-        sql_obj.append_db(df,conn=tmp_table_conn,tabl_name=tabl_name,schema='tmp')
+        sql_obj.append_db(df,conn=tmp_table_conn,tabl_name=tabl_name,schema='tmp',action=action)
     else:
         df.to_csv(os.path.join(os.getcwd(),"scraped_data",str(filename)+".csv"),index=False)
 
 def init(bseticker=[]):
+    final_df=pd.DataFrame()
+    url_exeception=[]
     try:
         for bseid in bseticker:
             logging.info(f"{bseid} has started")
-            
             for qtrid in constants.period_id:
                 URL=f'https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd={str(bseid)}&qtrid={str(qtrid)}'
                 logging.info(f"{URL}")
@@ -149,15 +152,23 @@ def init(bseticker=[]):
                         df=Case9(tree,columns).final_result()
                     df['bseid']=bseid
                     df['qtrid']=qtrid
-                    save_df(df,filename="BSEID_"+str(bseid)+"_qtrid_"+str(qtrid))
+                    #final_df=final_df.append(df,ignore_index=True)
+                    final_df=pd.concat([final_df,df],ignore_index=True)
+                    #save_df(df,filename="BSEID_"+str(bseid)+"_qtrid_"+str(qtrid))
                 except Exception as e:
-                    print(e,case_type)
-                    logging.info(f"{e}{format_exc()}{case_type}{URL}")
+                    print("In Exception inner",e,case_type,URL,sep="\n")
+                    url_exeception.append(URL)
+                    logging.info(f"{e}{format_exc()} \n caseid is {case_type} \n {URL}")
 
     except Exception as e:
         print(e)
-        logging.info(f"{e}{format_exc()}")
-
+        logging.info(f"{e} \n {format_exc()}")
+    finally:
+        logging.info(f"exceptional urls are {url_exeception}")
+        save_df(final_df,filename="final_df")
 if __name__=='__main__':
     print("Program has started")
     init(bseticker=bsetickerid)
+    # df=pd.read_csv(SCRAPED_DATA+"/final_df.csv")
+    # print(df.shape)
+    #save_df(df,tabl_name="tmp_tbl_company_extracols",local_save=False,action="replace")
