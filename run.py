@@ -10,8 +10,10 @@ from extended_main import *
 from db_utlity import *
 from utility import *
 import constants
+from datetime import datetime
+dt_time=datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
 
-logging.basicConfig(filename='output.log',filemode='w',level=logging.INFO,format=constants.LOG_FORMAT)
+logging.basicConfig(filename=str(dt_time)+'output.log',filemode='w',level=logging.INFO,format=constants.LOG_FORMAT)
 SCRAPED_DATA=os.path.join(os.getcwd(),"scraped_data")
 
 
