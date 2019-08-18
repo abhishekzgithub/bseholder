@@ -12,3 +12,4 @@ data
 *.env
 .ipynb_checkpoints
 scraped_data - Copy
+!unique_type_columns.csv
