@@ -8,7 +8,7 @@ This is a scraping script made in order to scrape the data from bombay stock exc
 ## Ground Rules
 
 -   You need to download  python from the below link
-    >[python v3.6.9](https://www.python.org/downloads/)
+    >[python v3](https://www.python.org/downloads/)
     
 -   You need to  **clone or download** the below repository
     >[https://github.com/abhishekzgithub/bseholder/tree/develop](https://github.com/abhishekzgithub/bseholder.git)
