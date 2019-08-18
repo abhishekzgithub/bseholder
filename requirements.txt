@@ -1,6 +1,6 @@
-html5lib="*"
+html5lib
 lxml
-requests=="*"
+requests
 pymysql
 python-dotenv
 pandas

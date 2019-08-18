@@ -13,19 +13,19 @@ import constants
 
 logging.basicConfig(filename='output.log',filemode='w',level=logging.INFO,format=constants.LOG_FORMAT)
 SCRAPED_DATA=os.path.join(os.getcwd(),"scraped_data")
-#URL=f'https://www.bseindia.com/corporates/shpPromoterNGroup.aspx?scripcd={BSETicker}&qtrid={period_id}
+
 
 #get the bseticker id from the database
 sql_obj=SQlAlchemyOperation()
 tmp_table_conn=sql_obj.get_sqlalchemy_conn(database_name="tmp")
-# pymysql_obj=MysqlConn()
-# conn=pymysql_obj.pymysql_connect()
+pymysql_obj=MysqlConn()
+conn=pymysql_obj.pymysql_connect()
 df_bseid_qtrid=pymysql_obj.pymysql_get_dataframe(query=utility.q,conn=conn)
 #df_bseid_qtrid.to_csv("df_bseid_qtrid.csv",index=False)
 
 #df_bseid_qtrid=pd.read_csv('df_bseid_qtrid.csv')
-#logging.info("bseid has been quried successfully")
-#bsetickerid=list(df_bseid_qtrid['BSETicker'])
+logging.info("bseid has been quried successfully")
+bsetickerid=list(df_bseid_qtrid['BSETicker'])
 #logging.info(f"bseid has length of {len(bsetickerid)}")
 
 columns_type_df=pd.read_csv("unique_type_columns.csv")
