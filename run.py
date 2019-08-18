@@ -11,9 +11,9 @@ from db_utlity import *
 from utility import *
 import constants
 from datetime import datetime
-dt_time=datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
+dt_time=datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
-logging.basicConfig(filename=str(dt_time)+'output.log',filemode='w',level=logging.INFO,format=constants.LOG_FORMAT)
+logging.basicConfig(filename=f'{dt_time}_output.log',filemode='w',level=logging.INFO,format=constants.LOG_FORMAT)
 SCRAPED_DATA=os.path.join(os.getcwd(),"scraped_data")
 
 
@@ -168,7 +168,7 @@ def init(bseticker=[]):
         save_df(final_df,filename="final_df")
 if __name__=='__main__':
     print("Program has started")
-    init(bseticker=bsetickerid)
+    #init(bseticker=bsetickerid)
     # df=pd.read_csv(SCRAPED_DATA+"/final_df.csv")
     # print(df.shape)
     #save_df(df,tabl_name="tmp_tbl_company_extracols",local_save=False,action="replace")
