@@ -38,7 +38,7 @@ def save_df(df,tabl_name="tmp_tbl_company_extracols",local_save=True,caseid="",f
     if not local_save:
         sql_obj.append_db(df,conn=tmp_table_conn,tabl_name=tabl_name,schema='tmp',action=action)
     else:
-        df.to_csv(os.path.join(os.getcwd(),"scraped_data",str(filename)+".csv"),index=False)
+        df.to_csv(os.path.join(os.getcwd(),"scraped_data",str(filename)+str(dt_time)+".csv"),index=False)
 
 def init(bseticker=[]):
     final_df=pd.DataFrame()
