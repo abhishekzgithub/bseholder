@@ -20,7 +20,7 @@ sql_obj=SQlAlchemyOperation()
 tmp_table_conn=sql_obj.get_sqlalchemy_conn(database_name="tmp")
 pymysql_obj=MysqlConn()
 conn=pymysql_obj.pymysql_connect()
-df_bseid_qtrid=pymysql_obj.pymysql_get_dataframe(query=utility.q,conn=conn)
+df_bseid_qtrid=pymysql_obj.pymysql_get_dataframe(query=constants.q,conn=conn)
 #df_bseid_qtrid.to_csv("df_bseid_qtrid.csv",index=False)
 
 #df_bseid_qtrid=pd.read_csv('df_bseid_qtrid.csv')
